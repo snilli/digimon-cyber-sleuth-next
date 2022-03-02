@@ -16,7 +16,7 @@ const MainContextProvider = ({children}: MainContextProps): JSX.Element => {
   const state = initMainState()
 
   const [mainStatePersist, setMainStatePersist] = useMainStatePersist(state)
-  const [mainState, dispatch] = useImmerReducer<MainState, MainAction>(mainReducer, mainStatePersist)
+  const [mainState, dispatch] = useImmerReducer<MainState, MainAction>(mainReducer, mainStatePersist as MainState)
 
   useEffect(() => {
     setMainStatePersist(mainState)

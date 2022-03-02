@@ -4,7 +4,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const nextConfig = {
     swcMinify: true,
-    trailingSlash: true,
+    trailingSlash: false,
     reactStrictMode: true,
 }
 
