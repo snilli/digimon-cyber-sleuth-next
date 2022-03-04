@@ -2,50 +2,240 @@
 ### Do not make changes to this file directly
 
 
-type Ability {
+"""Ability state"""
+type Ability implements AbilityInterface {
+  """Ability description"""
   description: String!
-  digimons: [DigimonInfo]
+
+  """Ability of digimons"""
+  digimons: [DigimonInfo!]!
+
+  """Ability id"""
   id: ID!
+
+  """Ability name"""
   name: String!
 }
 
-type Digimon implements DigimonInfo {
-  ability: Ability!
+"""AbilityInfo"""
+type AbilityInfo implements AbilityInterface {
+  """Ability description"""
+  description: String!
+
+  """Ability id"""
+  id: ID!
+
+  """Ability name"""
+  name: String!
+}
+
+"""AbilityInterface"""
+interface AbilityInterface {
+  """Ability description"""
+  description: String!
+
+  """Ability id"""
+  id: ID!
+
+  """Ability name"""
+  name: String!
+}
+
+type Digimon implements DigimonInfoInterface {
+  ability: AbilityInfo!
   attribute: DigimonAttribute!
   digimonType: DigimonType!
   equipSlot: Int!
+  evoFrom: [DigimonEvoFrom]
+  evoInto: [DigimonEvoInto]
+
+  """Digimon icon"""
   icon: String!
+
+  """Digimon id"""
   id: ID!
+
+  """Digimon image"""
   img: String!
   memory: Int!
+  moves: [MoveDigimon!]!
+
+  """Digimon name"""
   name: String!
-  no: String!
-  state: DigimonState!
+
+  """Digimon no"""
+  no: Int!
+  stage: DigimonStage!
+  stats: [DigimonStat!]!
 }
 
 """attribute of digimon in game"""
 enum DigimonAttribute {
+  """digimon Dark"""
   Dark
+
+  """digimon Earth"""
   Earth
+
+  """digimon Electric"""
   Electric
+
+  """digimon Fire"""
   Fire
+
+  """digimon Light"""
   Light
+
+  """digimon Neutral"""
   Neutral
+
+  """digimon Plant"""
   Plant
+
+  """digimon Water"""
   Water
+
+  """digimon Wind"""
   Wind
 }
 
-interface DigimonInfo {
+"""DigimonEvoFrom"""
+type DigimonEvoFrom implements DigimonInfoInterface {
+  """Digimon icon"""
   icon: String!
+
+  """Digimon id"""
   id: ID!
+
+  """Digimon image"""
   img: String!
+
+  """Digimon name"""
   name: String!
-  no: String!
+
+  """Digimon no"""
+  no: Int!
+}
+
+type DigimonEvoInto implements DigimonInfoInterface {
+  description: String!
+
+  """Digimon icon"""
+  icon: String!
+
+  """Digimon id"""
+  id: ID!
+
+  """Digimon image"""
+  img: String!
+  lvl: Int!
+
+  """Digimon name"""
+  name: String!
+
+  """Digimon no"""
+  no: Int!
+  require: DigimonEvoIntoRequire
+}
+
+"""DigimonEvoIntoRequire"""
+type DigimonEvoIntoRequire {
+  """abi for Digimon of evo into to strong digimon require"""
+  abi: Int
+
+  """akt for Digimon of evo into to strong digimon require"""
+  atk: Int
+
+  """cam for Digimon of evo into to strong digimon require"""
+  cam: Int
+
+  """it can change mode to evo"""
+  changeMode: Boolean
+
+  """def for Digimon of evo into to strong digimon require"""
+  def: Int
+
+  """need to has dlc frist for unlock requirement"""
+  dlc: Boolean
+
+  """need to cleared hacker memory frist for unlock requirement"""
+  hackerCleared: Boolean
+
+  """hp for Digimon of evo into to strong digimon require"""
+  hp: Int
+
+  """int for Digimon of evo into to strong digimon require"""
+  int: Int
+
+  """itm neet to unloack for Digimon of evo into to strong digimon require"""
+  item: String
+
+  """jogress with another digimon for unlock"""
+  jogress: DigimonEvoIntoRequireJogress
+
+  """sp for Digimon of evo into to strong digimon require"""
+  sp: Int
+
+  """spd for Digimon of evo into to strong digimon require"""
+  spd: Int
+}
+
+"""DigimonEvoIntoRequireJogress"""
+type DigimonEvoIntoRequireJogress implements DigimonInfoInterface {
+  """Digimon icon"""
+  icon: String!
+
+  """Digimon id"""
+  id: ID!
+
+  """Digimon image"""
+  img: String!
+
+  """Digimon name"""
+  name: String!
+
+  """Digimon no"""
+  no: Int!
+}
+
+"""DigimonInfo"""
+type DigimonInfo implements DigimonInfoInterface {
+  """Digimon icon"""
+  icon: String!
+
+  """Digimon id"""
+  id: ID!
+
+  """Digimon image"""
+  img: String!
+
+  """Digimon name"""
+  name: String!
+
+  """Digimon no"""
+  no: Int!
+}
+
+"""DigimonInfoInterface"""
+interface DigimonInfoInterface {
+  """Digimon icon"""
+  icon: String!
+
+  """Digimon id"""
+  id: ID!
+
+  """Digimon image"""
+  img: String!
+
+  """Digimon name"""
+  name: String!
+
+  """Digimon no"""
+  no: Int!
 }
 
 """state of digimon in game"""
-enum DigimonState {
+enum DigimonStage {
   """state Armor"""
   Armor
 
@@ -74,6 +264,54 @@ enum DigimonState {
   Ultra
 }
 
+"""Digimon stat detail"""
+type DigimonStat implements DigimonStatInterface {
+  """Digimon at lvl has atk"""
+  atk: Int!
+
+  """Digimon at lvl has def"""
+  def: Int!
+
+  """Digimon at lvl has hp"""
+  hp: Int!
+
+  """Digimon at lvl has int"""
+  int: Int!
+
+  """Digimon stat at lvl"""
+  lvl: Int!
+
+  """Digimon at lvl has sp"""
+  sp: Int!
+
+  """Digimon at lvl has spd"""
+  spd: Int!
+}
+
+"""DigimonStatInterface"""
+interface DigimonStatInterface {
+  """Digimon at lvl has atk"""
+  atk: Int!
+
+  """Digimon at lvl has def"""
+  def: Int!
+
+  """Digimon at lvl has hp"""
+  hp: Int!
+
+  """Digimon at lvl has int"""
+  int: Int!
+
+  """Digimon stat at lvl"""
+  lvl: Int!
+
+  """Digimon at lvl has sp"""
+  sp: Int!
+
+  """Digimon at lvl has spd"""
+  spd: Int!
+}
+
 """type of digimon in game"""
 enum DigimonType {
   Data
@@ -82,14 +320,33 @@ enum DigimonType {
   Virus
 }
 
-type Move {
+"""Move state"""
+type Move implements MoveInterface {
+  """Move atrribute"""
   attribute: MoveAttribute!
+
+  """Move description"""
   description: String!
+
+  """Move state"""
+  digimons: [DigimonInfo!]!
+
+  """Move ID"""
   id: ID!
+
+  """Move can inheritable"""
   inheritable: Boolean!
+
+  """Move name"""
   name: String!
+
+  """Move power"""
   power: Int!
+
+  """Move consume sp"""
   sp: Int!
+
+  """Move type"""
   type: MoveType!
 }
 
@@ -106,6 +363,63 @@ enum MoveAttribute {
   Wind
 }
 
+"""MoveDigimon"""
+type MoveDigimon implements MoveInterface {
+  """Move atrribute"""
+  attribute: MoveAttribute!
+
+  """Move description"""
+  description: String!
+
+  """Move ID"""
+  id: ID!
+
+  """Move can inheritable"""
+  inheritable: Boolean!
+
+  """Get move when level"""
+  lvl: Int
+
+  """Move name"""
+  name: String!
+
+  """Move power"""
+  power: Int!
+
+  """Move consume sp"""
+  sp: Int!
+
+  """Move type"""
+  type: MoveType!
+}
+
+"""MoveInterface"""
+interface MoveInterface {
+  """Move atrribute"""
+  attribute: MoveAttribute!
+
+  """Move description"""
+  description: String!
+
+  """Move ID"""
+  id: ID!
+
+  """Move can inheritable"""
+  inheritable: Boolean!
+
+  """Move name"""
+  name: String!
+
+  """Move power"""
+  power: Int!
+
+  """Move consume sp"""
+  sp: Int!
+
+  """Move type"""
+  type: MoveType!
+}
+
 """type of move in game"""
 enum MoveType {
   Direct
@@ -116,7 +430,12 @@ enum MoveType {
 }
 
 type Query {
+  """All abilities state"""
   abilities: [Ability!]!
-  digimons: [Digimon]!
+
+  """Digimon query"""
+  digimons: [Digimon!]!
+
+  """All move state"""
   moves: [Move!]!
 }

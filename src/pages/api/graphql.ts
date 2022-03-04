@@ -1,11 +1,12 @@
-import 'reflect-metadata'
 import { ApolloServer } from 'apollo-server-micro'
 import { PageConfig, NextApiRequest, NextApiResponse } from 'next'
 import { schema } from '../../graphql/schema'
 import { GraphQLSchema } from 'graphql'
+import { getContent } from '../../graphql/context'
 
 const apolloServer = new ApolloServer({
     schema: schema as unknown as GraphQLSchema,
+    context: getContent(),
 })
 
 const startServer = apolloServer.start()

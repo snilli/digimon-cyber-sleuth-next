@@ -1,12 +1,8 @@
-import { BaseEntity } from '../../../utils/base-entity'
+import { NexusGenEnums } from '../../../nexus-typegen'
+import { BaseEntity, BaseEntityState } from '../../../utils/base-entity'
 
-export interface DigimonAbility {
-    id: string
-    name: string
-    description: string
-}
-
-export interface DigimonState {
+export interface DigimonStat {
+    lvl: number
     hp: number
     sp: number
     atk: number
@@ -15,66 +11,62 @@ export interface DigimonState {
     spd: number
 }
 
-export interface DigimonMove {
-    level: number
-    id: string
-    name: string
-    sp: number
-    type: string
-    power: number
-    attribute: string
-    inheritable: boolean
-    description: string
-}
-
-export interface DigimonEvoTo {
-    id: string
-    name: string
-    icon: string
-    level: number
-    hp?: number
-    sp?: number
-    atk?: number
-    def?: number
-    int?: number
-    spd?: number
-    cam?: number
+export interface DigimonInfo {
+    icon: string // String!
+    id: string // ID!
+    img: string // String!
+    name: string // String!
+    no: number // String!
 }
 
 export interface DigimonEvoFrom {
     id: string
-    name: string
-    icon: string
 }
 
-export interface DigimonEntityState {
+export interface DigimonMove {
     id: string
-    no: number
-    name: string
-    icon: string
-    stage: string
-    type: string
-    attribute: string
-    memory: number
-    equipSlot: number
-    hp: number
-    sp: number
-    atk: number
-    def: number
-    int: number
-    spd: number
-    ability: Map<string, DigimonAbility>
-    img: string
-    evoFrom: {}
-    evoTo: Map<string, DigimonEvoTo>
-    move: Map<string, DigimonMove>
-    stat: Map<string, DigimonState>
+    lvl: number
 }
 
-export class DigimonEntity extends BaseEntity {
-    readonly state: DigimonEntityState
-    constructor(input: DigimonEntityState) {
-        super()
-        this.state = input
+export interface DigimonEvoIntoRequire {
+    atk?: number
+    abi?: number
+    hp?: number
+    def?: number
+    int?: number
+    spd?: number
+    cam?: number
+    item?: string
+    sp?: number
+    hackerCleared?: boolean
+    dlc?: boolean,
+    jogress?: {
+        id: string   
+    }
+    changeMode?: boolean
+}
+export interface DigimonEvoInto {
+    id: string
+    lvl: number
+    description: string
+    require?: DigimonEvoIntoRequire
+}
+
+export interface Digimon extends DigimonInfo, BaseEntityState {
+    stage: NexusGenEnums['DigimonStage'] // DigimonState!
+    digimonType: NexusGenEnums['DigimonType'] // DigimonType!
+    attribute: NexusGenEnums['DigimonAttribute'] // DigimonAttribute!
+    memory: number // Int!
+    equipSlot: number // Int!
+    abilityId: string
+    evoFrom?: DigimonEvoFrom[]
+    evoInto?: DigimonEvoInto[]
+    moves: DigimonMove[]
+    stats: DigimonStat[]
+}
+
+export class DigimonEntity extends BaseEntity<Digimon> {
+    constructor(input: Digimon) {
+        super(input)
     }
 }

@@ -1,31 +1,55 @@
-import { objectType, extendType } from 'nexus'
-import ability from '../../json/ability-db.json'
-import digimon from '../../json/digimon-db.json'
+import { objectType, extendType, interfaceType } from 'nexus'
+
+export const AbilityInterface = interfaceType({
+    name: 'AbilityInterface',
+    description: 'AbilityInterface',
+    definition(t) {
+        t.nonNull.id('id', {
+            description: 'Ability id',
+        })
+        t.nonNull.string('name', {
+            description: 'Ability name',
+        })
+        t.nonNull.string('description', {
+            description: 'Ability description',
+        })
+    },
+    resolveType() {
+        return 'Ability'
+    },
+})
+
+export const AbilityInfo = objectType({
+    name: 'AbilityInfo',
+    description: 'AbilityInfo',
+    definition(t) {
+        t.implements(AbilityInterface)
+    },
+})
 
 export const Ability = objectType({
     name: 'Ability',
+    description: 'Ability state',
     definition(t) {
-        t.nonNull.id('id')
-        t.nonNull.string('name')
-        t.nonNull.string('description')
-        t.list.field('digimons', {
+        t.implements(AbilityInterface)
+        t.nonNull.list.nonNull.field('digimons', {
             type: 'DigimonInfo',
-            resolve(root) {
-                const digimons = []
-                for (const key of Object.keys(root.digimons)) {
-                    const digi = digimon[key]
-                    digimons.push({
-                        id: digi.id,
-                        no: digi.no.toString(),
-                        name: digi.name,
-                        img: digi.img,
-                        icon: digi.icon,
-                    })
-                }
-                console.log(digimons)
-                
-                return digimons
-            }
+            description: 'Ability of digimons',
+            resolve(root, _, ctx) {
+                const digimonMap =
+                    ctx.digimonUseCase.multiGetDigimonByIdUseCase.execute(
+                        root.digimonIds
+                    )
+                return Array.from(digimonMap).map(([_, digimon]) => {
+                    return {
+                        id: digimon.id,
+                        name: digimon.name,
+                        no: digimon.no,
+                        img: digimon.img,
+                        icon: digimon.icon,
+                    }
+                })
+            },
         })
     },
 })
@@ -35,17 +59,18 @@ export const Abilities = extendType({
     definition(t) {
         t.nonNull.list.nonNull.field('abilities', {
             type: 'Ability',
+            description: 'All abilities state',
             async resolve(_, _args, ctx) {
-                const q = []
-                for (const [, w] of Object.entries(ability)) {
-                    q.push({
-                        id: w.id,
-                        digimons: w.digimon,
-                        name: w.name,
-                        description: w.description,
-                    })
-                }
-                return q
+                const abilityMap =
+                    ctx.abilityUseCase.getAllAbilityUseCase.execute()
+                return Array.from(abilityMap).map(([, ability]) => {
+                    return {
+                        id: ability.id,
+                        name: ability.name,
+                        description: ability.description,
+                        digimonIds: ability.digimonIds,
+                    }
+                })
             },
         })
     },

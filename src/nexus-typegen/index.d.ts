@@ -3,7 +3,10 @@
  * Do not make changes to this file directly
  */
 
-
+import type * as AbilityEntity from "./../core/ability/entitys/ability-entity"
+import type * as DigimonEntity from "./../core/digimon/entitys/digimon-entity"
+import type * as MoveEntity from "./../core/move/entitys/move-entity"
+import type { Context as context } from "./../graphql/context"
 import type { core, connectionPluginCore } from "nexus"
 
 declare global {
@@ -30,7 +33,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   DigimonAttribute: "Dark" | "Earth" | "Electric" | "Fire" | "Light" | "Neutral" | "Plant" | "Water" | "Wind"
-  DigimonState: "Armor" | "Baby" | "Champion" | "In-Training" | "Mega" | "None" | "Rookie" | "Ultimate" | "Ultra"
+  DigimonStage: "Armor" | "Baby" | "Champion" | "In-Training" | "Mega" | "None" | "Rookie" | "Ultimate" | "Ultra"
   DigimonType: "Data" | "Free" | "Vaccine" | "Virus"
   MoveAttribute: "Dark" | "Earth" | "Electric" | "Fire" | "Light" | "Neutral" | "Plant" | "Water" | "Wind"
   MoveType: "Direct" | "Fixed" | "Magic" | "Physical" | "Support"
@@ -45,28 +48,28 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Ability: { // root type
+  Ability: AbilityEntity.Ability;
+  AbilityInfo: { // root type
     description: string; // String!
     id: string; // ID!
     name: string; // String!
   }
-  Digimon: { // root type
-    attribute: NexusGenEnums['DigimonAttribute']; // DigimonAttribute!
-    digimonType: NexusGenEnums['DigimonType']; // DigimonType!
-    equipSlot: number; // Int!
-    icon: string; // String!
+  Digimon: DigimonEntity.Digimon;
+  DigimonEvoFrom: DigimonEntity.DigimonEvoFrom;
+  DigimonEvoInto: DigimonEntity.DigimonEvoInto;
+  DigimonEvoIntoRequire: DigimonEntity.DigimonEvoIntoRequire;
+  DigimonEvoIntoRequireJogress: { // root type
     id: string; // ID!
-    img: string; // String!
-    memory: number; // Int!
-    name: string; // String!
-    no: string; // String!
-    state: NexusGenEnums['DigimonState']; // DigimonState!
   }
-  Move: { // root type
+  DigimonInfo: DigimonEntity.DigimonInfo;
+  DigimonStat: DigimonEntity.DigimonStat;
+  Move: MoveEntity.Move;
+  MoveDigimon: { // root type
     attribute: NexusGenEnums['MoveAttribute']; // MoveAttribute!
     description: string; // String!
     id: string; // ID!
     inheritable: boolean; // Boolean!
+    lvl?: number | null; // Int
     name: string; // String!
     power: number; // Int!
     sp: number; // Int!
@@ -76,7 +79,10 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  DigimonInfo: NexusGenRootTypes['Digimon'];
+  AbilityInterface: NexusGenRootTypes['Ability'] | NexusGenRootTypes['AbilityInfo'];
+  DigimonInfoInterface: NexusGenRootTypes['Digimon'] | NexusGenRootTypes['DigimonEvoFrom'] | NexusGenRootTypes['DigimonEvoInto'] | NexusGenRootTypes['DigimonEvoIntoRequireJogress'] | NexusGenRootTypes['DigimonInfo'];
+  DigimonStatInterface: NexusGenRootTypes['DigimonStat'];
+  MoveInterface: NexusGenRootTypes['Move'] | NexusGenRootTypes['MoveDigimon'];
 }
 
 export interface NexusGenUnions {
@@ -89,24 +95,136 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   Ability: { // field return type
     description: string; // String!
-    digimons: Array<NexusGenRootTypes['DigimonInfo'] | null> | null; // [DigimonInfo]
+    digimons: NexusGenRootTypes['DigimonInfo'][]; // [DigimonInfo!]!
+    id: string; // ID!
+    name: string; // String!
+  }
+  AbilityInfo: { // field return type
+    description: string; // String!
     id: string; // ID!
     name: string; // String!
   }
   Digimon: { // field return type
-    ability: NexusGenRootTypes['Ability']; // Ability!
+    ability: NexusGenRootTypes['AbilityInfo']; // AbilityInfo!
     attribute: NexusGenEnums['DigimonAttribute']; // DigimonAttribute!
     digimonType: NexusGenEnums['DigimonType']; // DigimonType!
     equipSlot: number; // Int!
+    evoFrom: Array<NexusGenRootTypes['DigimonEvoFrom'] | null> | null; // [DigimonEvoFrom]
+    evoInto: Array<NexusGenRootTypes['DigimonEvoInto'] | null> | null; // [DigimonEvoInto]
     icon: string; // String!
     id: string; // ID!
     img: string; // String!
     memory: number; // Int!
+    moves: NexusGenRootTypes['MoveDigimon'][]; // [MoveDigimon!]!
     name: string; // String!
-    no: string; // String!
-    state: NexusGenEnums['DigimonState']; // DigimonState!
+    no: number; // Int!
+    stage: NexusGenEnums['DigimonStage']; // DigimonStage!
+    stats: NexusGenRootTypes['DigimonStat'][]; // [DigimonStat!]!
+  }
+  DigimonEvoFrom: { // field return type
+    icon: string; // String!
+    id: string; // ID!
+    img: string; // String!
+    name: string; // String!
+    no: number; // Int!
+  }
+  DigimonEvoInto: { // field return type
+    description: string; // String!
+    icon: string; // String!
+    id: string; // ID!
+    img: string; // String!
+    lvl: number; // Int!
+    name: string; // String!
+    no: number; // Int!
+    require: NexusGenRootTypes['DigimonEvoIntoRequire'] | null; // DigimonEvoIntoRequire
+  }
+  DigimonEvoIntoRequire: { // field return type
+    abi: number | null; // Int
+    atk: number | null; // Int
+    cam: number | null; // Int
+    changeMode: boolean | null; // Boolean
+    def: number | null; // Int
+    dlc: boolean | null; // Boolean
+    hackerCleared: boolean | null; // Boolean
+    hp: number | null; // Int
+    int: number | null; // Int
+    item: string | null; // String
+    jogress: NexusGenRootTypes['DigimonEvoIntoRequireJogress'] | null; // DigimonEvoIntoRequireJogress
+    sp: number | null; // Int
+    spd: number | null; // Int
+  }
+  DigimonEvoIntoRequireJogress: { // field return type
+    icon: string; // String!
+    id: string; // ID!
+    img: string; // String!
+    name: string; // String!
+    no: number; // Int!
+  }
+  DigimonInfo: { // field return type
+    icon: string; // String!
+    id: string; // ID!
+    img: string; // String!
+    name: string; // String!
+    no: number; // Int!
+  }
+  DigimonStat: { // field return type
+    atk: number; // Int!
+    def: number; // Int!
+    hp: number; // Int!
+    int: number; // Int!
+    lvl: number; // Int!
+    sp: number; // Int!
+    spd: number; // Int!
   }
   Move: { // field return type
+    attribute: NexusGenEnums['MoveAttribute']; // MoveAttribute!
+    description: string; // String!
+    digimons: NexusGenRootTypes['DigimonInfo'][]; // [DigimonInfo!]!
+    id: string; // ID!
+    inheritable: boolean; // Boolean!
+    name: string; // String!
+    power: number; // Int!
+    sp: number; // Int!
+    type: NexusGenEnums['MoveType']; // MoveType!
+  }
+  MoveDigimon: { // field return type
+    attribute: NexusGenEnums['MoveAttribute']; // MoveAttribute!
+    description: string; // String!
+    id: string; // ID!
+    inheritable: boolean; // Boolean!
+    lvl: number | null; // Int
+    name: string; // String!
+    power: number; // Int!
+    sp: number; // Int!
+    type: NexusGenEnums['MoveType']; // MoveType!
+  }
+  Query: { // field return type
+    abilities: NexusGenRootTypes['Ability'][]; // [Ability!]!
+    digimons: NexusGenRootTypes['Digimon'][]; // [Digimon!]!
+    moves: NexusGenRootTypes['Move'][]; // [Move!]!
+  }
+  AbilityInterface: { // field return type
+    description: string; // String!
+    id: string; // ID!
+    name: string; // String!
+  }
+  DigimonInfoInterface: { // field return type
+    icon: string; // String!
+    id: string; // ID!
+    img: string; // String!
+    name: string; // String!
+    no: number; // Int!
+  }
+  DigimonStatInterface: { // field return type
+    atk: number; // Int!
+    def: number; // Int!
+    hp: number; // Int!
+    int: number; // Int!
+    lvl: number; // Int!
+    sp: number; // Int!
+    spd: number; // Int!
+  }
+  MoveInterface: { // field return type
     attribute: NexusGenEnums['MoveAttribute']; // MoveAttribute!
     description: string; // String!
     id: string; // ID!
@@ -115,18 +233,6 @@ export interface NexusGenFieldTypes {
     power: number; // Int!
     sp: number; // Int!
     type: NexusGenEnums['MoveType']; // MoveType!
-  }
-  Query: { // field return type
-    abilities: NexusGenRootTypes['Ability'][]; // [Ability!]!
-    digimons: Array<NexusGenRootTypes['Digimon'] | null>; // [Digimon]!
-    moves: NexusGenRootTypes['Move'][]; // [Move!]!
-  }
-  DigimonInfo: { // field return type
-    icon: string; // String!
-    id: string; // ID!
-    img: string; // String!
-    name: string; // String!
-    no: string; // String!
   }
 }
 
@@ -137,24 +243,100 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     name: 'String'
   }
+  AbilityInfo: { // field return type name
+    description: 'String'
+    id: 'ID'
+    name: 'String'
+  }
   Digimon: { // field return type name
-    ability: 'Ability'
+    ability: 'AbilityInfo'
     attribute: 'DigimonAttribute'
     digimonType: 'DigimonType'
     equipSlot: 'Int'
+    evoFrom: 'DigimonEvoFrom'
+    evoInto: 'DigimonEvoInto'
     icon: 'String'
     id: 'ID'
     img: 'String'
     memory: 'Int'
+    moves: 'MoveDigimon'
     name: 'String'
-    no: 'String'
-    state: 'DigimonState'
+    no: 'Int'
+    stage: 'DigimonStage'
+    stats: 'DigimonStat'
+  }
+  DigimonEvoFrom: { // field return type name
+    icon: 'String'
+    id: 'ID'
+    img: 'String'
+    name: 'String'
+    no: 'Int'
+  }
+  DigimonEvoInto: { // field return type name
+    description: 'String'
+    icon: 'String'
+    id: 'ID'
+    img: 'String'
+    lvl: 'Int'
+    name: 'String'
+    no: 'Int'
+    require: 'DigimonEvoIntoRequire'
+  }
+  DigimonEvoIntoRequire: { // field return type name
+    abi: 'Int'
+    atk: 'Int'
+    cam: 'Int'
+    changeMode: 'Boolean'
+    def: 'Int'
+    dlc: 'Boolean'
+    hackerCleared: 'Boolean'
+    hp: 'Int'
+    int: 'Int'
+    item: 'String'
+    jogress: 'DigimonEvoIntoRequireJogress'
+    sp: 'Int'
+    spd: 'Int'
+  }
+  DigimonEvoIntoRequireJogress: { // field return type name
+    icon: 'String'
+    id: 'ID'
+    img: 'String'
+    name: 'String'
+    no: 'Int'
+  }
+  DigimonInfo: { // field return type name
+    icon: 'String'
+    id: 'ID'
+    img: 'String'
+    name: 'String'
+    no: 'Int'
+  }
+  DigimonStat: { // field return type name
+    atk: 'Int'
+    def: 'Int'
+    hp: 'Int'
+    int: 'Int'
+    lvl: 'Int'
+    sp: 'Int'
+    spd: 'Int'
   }
   Move: { // field return type name
     attribute: 'MoveAttribute'
     description: 'String'
+    digimons: 'DigimonInfo'
     id: 'ID'
     inheritable: 'Boolean'
+    name: 'String'
+    power: 'Int'
+    sp: 'Int'
+    type: 'MoveType'
+  }
+  MoveDigimon: { // field return type name
+    attribute: 'MoveAttribute'
+    description: 'String'
+    id: 'ID'
+    inheritable: 'Boolean'
+    lvl: 'Int'
     name: 'String'
     power: 'Int'
     sp: 'Int'
@@ -165,12 +347,36 @@ export interface NexusGenFieldTypeNames {
     digimons: 'Digimon'
     moves: 'Move'
   }
-  DigimonInfo: { // field return type name
+  AbilityInterface: { // field return type name
+    description: 'String'
+    id: 'ID'
+    name: 'String'
+  }
+  DigimonInfoInterface: { // field return type name
     icon: 'String'
     id: 'ID'
     img: 'String'
     name: 'String'
-    no: 'String'
+    no: 'Int'
+  }
+  DigimonStatInterface: { // field return type name
+    atk: 'Int'
+    def: 'Int'
+    hp: 'Int'
+    int: 'Int'
+    lvl: 'Int'
+    sp: 'Int'
+    spd: 'Int'
+  }
+  MoveInterface: { // field return type name
+    attribute: 'MoveAttribute'
+    description: 'String'
+    id: 'ID'
+    inheritable: 'Boolean'
+    name: 'String'
+    power: 'Int'
+    sp: 'Int'
+    type: 'MoveType'
   }
 }
 
@@ -178,11 +384,23 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  DigimonInfo: "Digimon"
+  AbilityInterface: "Ability" | "AbilityInfo"
+  DigimonInfoInterface: "Digimon" | "DigimonEvoFrom" | "DigimonEvoInto" | "DigimonEvoIntoRequireJogress" | "DigimonInfo"
+  DigimonStatInterface: "DigimonStat"
+  MoveInterface: "Move" | "MoveDigimon"
 }
 
 export interface NexusGenTypeInterfaces {
-  Digimon: "DigimonInfo"
+  Ability: "AbilityInterface"
+  AbilityInfo: "AbilityInterface"
+  Digimon: "DigimonInfoInterface"
+  DigimonEvoFrom: "DigimonInfoInterface"
+  DigimonEvoInto: "DigimonInfoInterface"
+  DigimonEvoIntoRequireJogress: "DigimonInfoInterface"
+  DigimonInfo: "DigimonInfoInterface"
+  DigimonStat: "DigimonStatInterface"
+  Move: "MoveInterface"
+  MoveDigimon: "MoveInterface"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -199,7 +417,7 @@ export type NexusGenUnionNames = never;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = "DigimonInfo";
+export type NexusGenAbstractsUsingStrategyResolveType = "AbilityInterface" | "DigimonInfoInterface" | "DigimonStatInterface" | "MoveInterface";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {
@@ -210,7 +428,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;

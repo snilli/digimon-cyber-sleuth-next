@@ -32,15 +32,15 @@ export abstract class JsonRepo<T extends BaseEntity<any>> {
         return this.dataMapping.get(id)
     }
 
-    multiGetById(ids: string[]): Array<T> {
-        const datas: Array<T> = []
+    multiGetById(ids: string[]): Map<string, T> {
+        const map: Map<string, T> = new Map()
         for (const id of ids) {
             const data = this.dataMapping.get(id)
             if (data) {
-                datas.push(data)
+                map.set(data.getId(), data)
             }
         }
 
-        return datas
+        return map
     }
 }
