@@ -32,7 +32,7 @@ module.exports = {
   },
   name: 'app',
   displayName: 'app',
-  rootDir: './../',
+  rootDir: './../../',
   testMatch: [
     '<rootDir>/src/tests/**/*.test.tsx',
   ],

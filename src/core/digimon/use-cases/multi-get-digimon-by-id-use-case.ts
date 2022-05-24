@@ -1,7 +1,7 @@
 import { singleton } from 'tsyringe'
 import { Digimon } from '../entitys/digimon-entity'
 import { DigimonRepo } from '../repos/digimon-repo'
-let i = 0
+
 @singleton()
 export class MultiGetDigimonByIdUseCase {
     constructor(private repo: DigimonRepo) {}

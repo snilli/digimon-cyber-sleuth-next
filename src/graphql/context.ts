@@ -9,7 +9,7 @@ export class Context {
     constructor(
         public digimonUseCase: DigimonUseCase,
         public moveUseCase: MoveUseCase,
-        public abilityUseCase: AbilityUseCase
+        public abilityUseCase: AbilityUseCase,
     ) {}
 }
 

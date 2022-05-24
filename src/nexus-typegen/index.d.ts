@@ -107,6 +107,7 @@ export interface NexusGenFieldTypes {
   Digimon: { // field return type
     ability: NexusGenRootTypes['AbilityInfo']; // AbilityInfo!
     attribute: NexusGenEnums['DigimonAttribute']; // DigimonAttribute!
+    balanceStat: NexusGenRootTypes['DigimonStat']; // DigimonStat!
     digimonType: NexusGenEnums['DigimonType']; // DigimonType!
     equipSlot: number; // Int!
     evoFrom: Array<NexusGenRootTypes['DigimonEvoFrom'] | null> | null; // [DigimonEvoFrom]
@@ -200,6 +201,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     abilities: NexusGenRootTypes['Ability'][]; // [Ability!]!
+    digimon: NexusGenRootTypes['Digimon']; // Digimon!
     digimons: NexusGenRootTypes['Digimon'][]; // [Digimon!]!
     moves: NexusGenRootTypes['Move'][]; // [Move!]!
   }
@@ -251,6 +253,7 @@ export interface NexusGenFieldTypeNames {
   Digimon: { // field return type name
     ability: 'AbilityInfo'
     attribute: 'DigimonAttribute'
+    balanceStat: 'DigimonStat'
     digimonType: 'DigimonType'
     equipSlot: 'Int'
     evoFrom: 'DigimonEvoFrom'
@@ -344,6 +347,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     abilities: 'Ability'
+    digimon: 'Digimon'
     digimons: 'Digimon'
     moves: 'Move'
   }
@@ -381,6 +385,11 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Query: {
+    digimon: { // args
+      id?: string | null; // String
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {

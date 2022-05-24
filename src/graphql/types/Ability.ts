@@ -38,7 +38,7 @@ export const Ability = objectType({
             resolve(root, _, ctx) {
                 const digimonMap =
                     ctx.digimonUseCase.multiGetDigimonByIdUseCase.execute(
-                        root.digimonIds
+                        root.digimonIds,
                     )
                 return Array.from(digimonMap).map(([_, digimon]) => {
                     return {

@@ -1,17 +1,4 @@
 module.exports = {
-    content: [
-        './src/pages/**/*.{js,ts,jsx,tsx}',
-        './src/components/**/*.{js,ts,jsx,tsx}',
-    ],
-    theme: {
-        extend: {
-            fontFamily: {
-                poppins: ['Poppins', 'sans-serif'],
-            },
-            colors: {
-                main: '#ff0157',
-            },
-        },
-    },
-    plugins: [require('daisyui')],
-}
+  content: ['./src/pages/**/*.{js,ts,jsx,tsx}'],
+  plugins: [require('daisyui')],
+};

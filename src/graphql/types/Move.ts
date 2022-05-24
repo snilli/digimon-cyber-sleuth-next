@@ -36,7 +36,7 @@ export const MoveInterface = interfaceType({
             description: 'Move consume sp',
         })
         t.nonNull.field('type', { type: MoveType, description: 'Move type' })
-        t.nonNull.int('power', {description: 'Move power'})
+        t.nonNull.int('power', { description: 'Move power' })
         t.nonNull.field('attribute', {
             type: MoveAttribute,
             description: 'Move atrribute',
@@ -75,7 +75,7 @@ export const Move = objectType({
             resolve(root, _, ctx) {
                 const digimonMap =
                     ctx.digimonUseCase.multiGetDigimonByIdUseCase.execute(
-                        root.digimonIds
+                        root.digimonIds,
                     )
 
                 return Array.from(digimonMap).map(([, digimon]) => {

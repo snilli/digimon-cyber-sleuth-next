@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    * {
-        @apply font-poppins m-0 p-0 box-border scroll-smooth;
-    }
-
-    section {
-        @apply p-[100px]
-    }
+.menu-bar {
+    height: calc(100vh - 'min-h-[4rem]');
 }

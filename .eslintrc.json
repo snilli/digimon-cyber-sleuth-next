@@ -9,9 +9,9 @@
 //     "plugin:react/recommended",
 //     "plugin:@typescript-eslint/recommended",
 //     "plugin:react-hooks/recommended"
-//     // Uncomment the following lines to enable eslint-config-prettier
-//     // Is not enabled right now to avoid issues with the Next.js repo
-//     //    "prettier"
+    // Uncomment the following lines to enable eslint-config-prettier
+    // Is not enabled right now to avoid issues with the Next.js repo
+    //    "prettier"
 //   ],
 //   "env": {
 //     "es6": true,
@@ -61,7 +61,7 @@
 
 {
   "root": true,
-  "extends": ["next/core-web-vitals"],
+  "extends": ["next/core-web-vitals", "prettier"],
   "plugins": ["testing-library"],
   "rules": {
     "react/display-name": "off"

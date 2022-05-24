@@ -1,11 +1,11 @@
-import { BaseEntity, BaseEntityState } from './base-entity'
+import { BaseEntity } from './base-entity'
 
 export type StoreCreateFactory<T extends Record<string, unknown>> = (
-    payload: any
+    payload: any,
 ) => T
 export type EntityCreateFactory<T extends BaseEntity = any> = (
     map: Map<string, T>,
-    payload: any
+    payload: any,
 ) => void
 export interface JsonRepoInput<T extends BaseEntity> {
     tableName: string

@@ -1,4 +1,10 @@
-import { enumType, objectType, extendType, interfaceType } from 'nexus'
+import {
+    enumType,
+    objectType,
+    extendType,
+    interfaceType,
+    stringArg,
+} from 'nexus'
 import { DigimonInfo as IDigimonInfo } from '../../core/digimon/entitys/digimon-entity'
 
 const DigimonType = enumType({
@@ -37,7 +43,11 @@ const DigimonAttribute = enumType({
         { name: 'Light', value: 'Light', description: 'digimon Light' },
         { name: 'Water', value: 'Water', description: 'digimon Water' },
         { name: 'Wind', value: 'Wind', description: 'digimon Wind' },
-        { name: 'Electric', value: 'Electric', description: 'digimon Electric' },
+        {
+            name: 'Electric',
+            value: 'Electric',
+            description: 'digimon Electric',
+        },
     ],
     description: 'attribute of digimon in game',
 })
@@ -71,34 +81,34 @@ export const DigimonInfoInterface = interfaceType({
     name: 'DigimonInfoInterface',
     description: 'DigimonInfoInterface',
     definition(t) {
-        t.nonNull.id('id', {description: 'Digimon id'})
+        t.nonNull.id('id', { description: 'Digimon id' })
         t.nonNull.int('no', {
             resolve(root) {
                 const parent = root as IDigimonInfo
                 return parent.no
             },
-            description:'Digimon no'
+            description: 'Digimon no',
         })
         t.nonNull.string('name', {
             resolve(root) {
                 const parent = root as IDigimonInfo
                 return parent.name
             },
-            description: 'Digimon name'
+            description: 'Digimon name',
         })
         t.nonNull.string('img', {
             resolve(root) {
                 const parent = root as IDigimonInfo
                 return parent.img
             },
-            description: 'Digimon image'
+            description: 'Digimon image',
         })
         t.nonNull.string('icon', {
             resolve(root) {
                 const parent = root as IDigimonInfo
                 return parent.icon
             },
-            description: 'Digimon icon'
+            description: 'Digimon icon',
         })
     },
 
@@ -135,19 +145,49 @@ export const DigimonEvoIntoRequire = objectType({
     name: 'DigimonEvoIntoRequire',
     description: 'DigimonEvoIntoRequire',
     definition(t) {
-        t.int('atk', {description: 'akt for Digimon of evo into to strong digimon require'})
-        t.int('abi', {description: 'abi for Digimon of evo into to strong digimon require'})
-        t.int('hp', {description: 'hp for Digimon of evo into to strong digimon require'})
-        t.int('def', {description: 'def for Digimon of evo into to strong digimon require'})
-        t.int('int', {description: 'int for Digimon of evo into to strong digimon require'})
-        t.int('spd', {description: 'spd for Digimon of evo into to strong digimon require'})
-        t.int('cam', {description: 'cam for Digimon of evo into to strong digimon require'})
-        t.string('item', {description: 'itm neet to unloack for Digimon of evo into to strong digimon require'})
-        t.int('sp', {description: 'sp for Digimon of evo into to strong digimon require'})
-        t.boolean('hackerCleared', {description: 'need to cleared hacker memory frist for unlock requirement'})
-        t.boolean('dlc', {description: 'need to has dlc frist for unlock requirement'})
-        t.boolean('changeMode', {description: 'it can change mode to evo'})
-        t.field('jogress',{
+        t.int('atk', {
+            description:
+                'akt for Digimon of evo into to strong digimon require',
+        })
+        t.int('abi', {
+            description:
+                'abi for Digimon of evo into to strong digimon require',
+        })
+        t.int('hp', {
+            description: 'hp for Digimon of evo into to strong digimon require',
+        })
+        t.int('def', {
+            description:
+                'def for Digimon of evo into to strong digimon require',
+        })
+        t.int('int', {
+            description:
+                'int for Digimon of evo into to strong digimon require',
+        })
+        t.int('spd', {
+            description:
+                'spd for Digimon of evo into to strong digimon require',
+        })
+        t.int('cam', {
+            description:
+                'cam for Digimon of evo into to strong digimon require',
+        })
+        t.string('item', {
+            description:
+                'itm neet to unloack for Digimon of evo into to strong digimon require',
+        })
+        t.int('sp', {
+            description: 'sp for Digimon of evo into to strong digimon require',
+        })
+        t.boolean('hackerCleared', {
+            description:
+                'need to cleared hacker memory frist for unlock requirement',
+        })
+        t.boolean('dlc', {
+            description: 'need to has dlc frist for unlock requirement',
+        })
+        t.boolean('changeMode', { description: 'it can change mode to evo' })
+        t.field('jogress', {
             type: 'DigimonEvoIntoRequireJogress',
             description: 'jogress with another digimon for unlock',
             resolve(root, _, ctx) {
@@ -156,7 +196,7 @@ export const DigimonEvoIntoRequire = objectType({
                 }
                 const digimon =
                     ctx.digimonUseCase.getDigimonByIdUseCase.execute(
-                        root.jogress.id
+                        root.jogress.id,
                     )
                 return {
                     id: digimon.id,
@@ -213,7 +253,7 @@ export const Digimon = objectType({
             resolve(root, _, ctx) {
                 const ability =
                     ctx.abilityUseCase.getAbilityByIdUseCase.execute(
-                        root.abilityId
+                        root.abilityId,
                     )
                 return {
                     id: ability.id,
@@ -235,7 +275,7 @@ export const Digimon = objectType({
                 }
                 const digimonMap =
                     ctx.digimonUseCase.multiGetDigimonByIdUseCase.execute(
-                        root.evoFrom.map((evoFrom) => evoFrom.id)
+                        root.evoFrom.map((evoFrom) => evoFrom.id),
                     )
                 return Array.from(digimonMap).map(([_, digimon]) => {
                     return {
@@ -257,7 +297,7 @@ export const Digimon = objectType({
                 const evoInto = root.evoInto
                 const digimonMap =
                     ctx.digimonUseCase.multiGetDigimonByIdUseCase.execute(
-                        evoInto.map((evoInto) => evoInto.id)
+                        evoInto.map((evoInto) => evoInto.id),
                     )
                 return Array.from(digimonMap).map(([_, digimon], idx) => {
                     const evo = evoInto[idx]
@@ -278,7 +318,7 @@ export const Digimon = objectType({
             type: 'MoveDigimon',
             resolve(root, _, ctx) {
                 const moveMap = ctx.moveUseCase.multiGetMoveByIdUseCase.execute(
-                    root.moves.map((move) => move.id)
+                    root.moves.map((move) => move.id),
                 )
                 return Array.from(moveMap).map(([_, move], idx) => {
                     return {
@@ -295,16 +335,22 @@ export const Digimon = objectType({
                 })
             },
         })
+        t.nonNull.field('balanceStat', {
+            type: 'DigimonStat',
+            resolve(_root) {
+                return _root.stats[1]
+            },
+        })
         t.nonNull.list.nonNull.field('stats', { type: 'DigimonStat' })
     },
 })
 
-export const Digimons = extendType({
+export const QueryDigimons = extendType({
     type: 'Query',
     definition(t) {
         t.nonNull.list.nonNull.field('digimons', {
             type: 'Digimon',
-            description: 'Digimon query',
+            description: 'Digimons query',
             resolve(_root, _angs, ctx) {
                 const digimonMap =
                     ctx.digimonUseCase.getAllDigimonUseCase.execute()
@@ -328,6 +374,43 @@ export const Digimons = extendType({
                         evoInto: digimon.evoInto,
                     }
                 })
+            },
+        })
+    },
+})
+
+export const QueryDigimon = extendType({
+    type: 'Query',
+    definition(t) {
+        t.nonNull.field('digimon', {
+            args: { id: stringArg({ description: 'Digimon id' }) },
+            type: 'Digimon',
+            description: 'Digimon query',
+            resolve(_root, _angs, ctx) {
+                if (!_angs.id) {
+                    throw Error('Not provide id')
+                }
+                const digimon =
+                    ctx.digimonUseCase.getDigimonByIdUseCase.execute(_angs.id)
+
+                return {
+                    id: digimon.id,
+                    no: digimon.no,
+                    abilityId: digimon.abilityId,
+                    name: digimon.name,
+                    img: digimon.img,
+                    icon: digimon.icon,
+                    digimonType: digimon.digimonType,
+                    stage: digimon.stage,
+                    memory: digimon.memory,
+                    attribute: digimon.attribute,
+                    equipSlot: digimon.equipSlot,
+                    moves: digimon.moves,
+                    stats: digimon.stats,
+                    evoFrom: digimon.evoFrom,
+                    evoInto: digimon.evoInto,
+                    balanceStat: digimon.stats[1],
+                }
             },
         })
     },

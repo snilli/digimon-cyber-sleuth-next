@@ -44,6 +44,7 @@ interface AbilityInterface {
 type Digimon implements DigimonInfoInterface {
   ability: AbilityInfo!
   attribute: DigimonAttribute!
+  balanceStat: DigimonStat!
   digimonType: DigimonType!
   equipSlot: Int!
   evoFrom: [DigimonEvoFrom]
@@ -434,6 +435,12 @@ type Query {
   abilities: [Ability!]!
 
   """Digimon query"""
+  digimon(
+    """Digimon id"""
+    id: String
+  ): Digimon!
+
+  """Digimons query"""
   digimons: [Digimon!]!
 
   """All move state"""
