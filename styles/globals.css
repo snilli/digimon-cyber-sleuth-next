@@ -1,7 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.menu-bar {
-    height: calc(100vh - 'min-h-[4rem]');
-}
