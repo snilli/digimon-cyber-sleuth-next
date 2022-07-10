@@ -1,83 +1,117 @@
 import { createTheme } from '@mui/material/styles'
-import { red } from '@mui/material/colors'
 import GlobalStyles from '@mui/material/GlobalStyles'
 
+declare module '@mui/material/styles' {
+	interface Palette {
+		neutral: Palette['primary']
+	}
+	interface PaletteOptions {
+		neutral: PaletteOptions['primary']
+	}
+	interface TypeBackground {
+		bg1: string
+		bg2: string
+		bg3: string
+	}
+}
 export const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#4688F4',
-        },
-        secondary: {
-            main: '#2b6eeb',
-        },
-        error: {
-            main: red.A400,
-        },
-        divider: 'rgb(221, 221, 221)',
-    },
-    components: {
-        MuiTypography: {
-            styleOverrides: {
-                h2: {
-                    fontWeight: 600,
-                    fontSize: '2.375rem',
-                },
-                h3: {
-                    fontWeight: 400,
-                    fontSize: '2.125rem',
-                },
-                h5: {
-                    fontWeight: 400,
-                    lineHeight: '2.5rem',
-                    fontSize: '1.5rem',
-                },
-                subtitle1: {
-                    fontWeight: 500,
-                    fontSize: '1rem',
-                    lineHeight: '1.5rem',
-                },
-            },
-        },
-        MuiCard: {
-            styleOverrides: {
-                root: {
-                    borderRadius: '.75rem',
-                },
-            },
-        },
-        MuiLink: {
-            styleOverrides: {
-                root: {
-                    textDecoration: 'none',
-                    textTransform: 'inherit',
-                    fontSize: '.875rem',
-                },
-            },
-        },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    textTransform: 'inherit',
-                    borderRadius: '.25rem',
-                    fontWeight: 600,
-                },
-            },
-        },
-    },
+	typography: {
+		fontFamily: 'Montserrat',
+	},
+	components: {
+		MuiCssBaseline: {
+			styleOverrides: {
+				'*': {
+					margin: 0,
+					padding: 0,
+				},
+				body: {
+					lineHeight: '1.7',
+					color: '#ffffff',
+					border: 'none',
+				},
+				ul: {
+					listStyle: 'none',
+				},
+				a: {
+					textDecoration: 'none',
+					color: '#ffffff',
+				},
+				h1: {
+					lineHeight: '1.2',
+					fontSize: '2.4rem',
+				},
+				h2: {
+					lineHeight: '1.2',
+					fontSize: '2rem',
+				},
+				h3: {
+					lineHeight: '1.2',
+					fontSize: '1.6rem',
+				},
+				h4: {
+					lineHeight: '1.2',
+					fontSize: '1.3rem',
+				},
+				h5: {
+					lineHeight: '1.2',
+				},
+				h6: {
+					lineHeight: '1.2',
+				},
+				section: {
+					padding: '6rem 0',
+				},
+				'section > h2': {
+					textAlign: 'center',
+					marginBottom: '4rem',
+				},
+			},
+		},
+	},
+	palette: {
+		neutral: {
+			main: '#64748B',
+			contrastText: '#ffffff',
+		},
+		background: {
+			default: '#1f2641',
+			bg1: '#1f2641',
+			bg2: '#2e3267',
+			bg3: '#424890',
+		},
+	},
 })
 
 export const globalStyles = (
-    <GlobalStyles
-        styles={{
-            ul: {
-                margin: 0,
-                padding: 0,
-                listStyle: 'none',
-            },
-            a: {
-                textDecoration: 'none',
-                color: 'inherit',
-            },
-        }}
-    />
+	<GlobalStyles
+		styles={{
+			'.container': {
+				margin: '0 auto',
+				width: '80%',
+			},
+			'.btn': {
+				display: 'inline-block',
+				background: 'white',
+				color: 'black',
+				padding: '1rem 2rem',
+				border: '1px solid transparent',
+				fontWeight: '500',
+				transition: theme.transitions.create('all', { duration: 400 }),
+			},
+			'.btn:hover': {
+				background: 'transparent',
+				color: '#ffffff',
+				backgroundColor: '#ffffff',
+			},
+			'.btn-primary': {
+				background: theme.palette.error.main,
+				color: 'white',
+			},
+			'.window-scroll': {
+				background: '#6c63ff!important',
+				boxShadow: '0 1rem 2rem rgba(0, 0, 0, 0.2)',
+			},
+		}}
+	/>
 )
